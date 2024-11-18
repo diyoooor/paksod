@@ -10,9 +10,10 @@ export default {
     extend: {
       colors: {
         text: "#1A1A19",
-        "green-dark": "#31511E",
-        "green-medium": "#859F3D",
-        "green-light": "#F6FCDF",
+        "green-black": "#12372A",
+        "green-dark": "#436850",
+        "green-medium": "#ADBC9F",
+        "green-light": "#FBFADA",
       },
     },
   },
