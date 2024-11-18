@@ -40,7 +40,7 @@ const MainLayout = ({ children }: ILayout) => {
   ];
   const router = useRouter();
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full lg:max-w-lg mx-auto">
       <header className=" text-white p-4 flex items-center justify-between h-20 sticky top-0 z-10 bg-white  drop-shadow-lg">
         <h1 className="text-lg font-semibold">
           <Image
