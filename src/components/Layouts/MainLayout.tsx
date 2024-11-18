@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ILayout } from "./RootLayout";
 import Image from "next/image";
@@ -7,8 +8,10 @@ import {
   IconSearch,
   IconUser,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const MainLayout = ({ children }: ILayout) => {
+  const router = useRouter();
   return (
     <div className="flex flex-col min-h-screen">
       <header className=" text-white p-4 flex items-center justify-between h-20">
@@ -19,15 +22,20 @@ const MainLayout = ({ children }: ILayout) => {
             width={70}
             height={30}
             className="h-fit w-fit"
+            onClick={() => router.push("/")}
           />
         </h1>
         <nav>
           <ul className="flex gap-4 text-text">
             <li>
-              <IconBasket className="w-10 h-10" stroke={1} />
+              <button onClick={() => router.push("/cart")}>
+                <IconBasket className="w-10 h-10" stroke={1} />
+              </button>
             </li>
             <li>
-              <IconUser className="w-10 h-10" stroke={1} />
+              <button onClick={() => router.push("/profile")}>
+                <IconUser className="w-10 h-10" stroke={1} />
+              </button>
             </li>
           </ul>
         </nav>
@@ -37,8 +45,15 @@ const MainLayout = ({ children }: ILayout) => {
       </main>
       <section className="p-4">
         <div className="flex gap-4 text-center p-4">
-          <IconHome className="mx-auto w-10 h-10 stroke-green-black " />
-          <IconSearch className="mx-auto w-10 h-10 stroke-green-dark" />
+          <button className="mx-auto" onClick={() => router.push("/")}>
+            <IconHome className=" w-10 h-10 stroke-green-black " stroke={1} />
+          </button>
+          <button className="mx-auto" onClick={() => router.push("/search")}>
+            <IconSearch
+              className="mx-auto w-10 h-10 stroke-green-dark"
+              stroke={1}
+            />
+          </button>
         </div>
       </section>
     </div>

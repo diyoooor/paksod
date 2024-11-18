@@ -13,6 +13,7 @@ export default function Layout({ children }: ILayout) {
     [key: string]: FC<ILayout>;
   } = {
     "/auth": BottomLessLayout,
+    "/search": BottomLessLayout,
   };
 
   const LayoutComponent =
