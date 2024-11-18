@@ -12,6 +12,7 @@ import {
   IconTruckDelivery,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface ICategories {
   id: number;
@@ -26,6 +27,7 @@ interface IWhyUs {
 }
 
 export default function Home() {
+  const router = useRouter();
   const categories: ICategories[] = [
     {
       id: 1,
@@ -99,6 +101,7 @@ export default function Home() {
             <div
               key={index}
               className="min-w-30 py-3 px-4 rounded-xl flex items-center gap-2 bg-white text-nowrap"
+              onClick={() => router.push(`/category/${item.name}`)}
             >
               <p>{item.icon}</p>
               <p className="text-xl">{item.name}</p>
