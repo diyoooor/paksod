@@ -24,17 +24,17 @@ const MainLayout = ({ children }: ILayout) => {
   const socials: ISocial[] = [
     {
       icon: <IconBrandFacebook stroke={1} />,
-      name: "Facebook",
+      name: "นุ้ย ผักสด",
       link: "https://www.facebook.com/profile.php?id=61558650133542",
     },
     {
       icon: <IconBrandLine stroke={1} />,
-      name: "Line",
+      name: "นุ้ย ผักสด",
       link: "https://www.line.me/",
     },
     {
       icon: <IconPhone stroke={1} />,
-      name: "Phone",
+      name: "เบอร์โทร",
       link: "tel:080-000-0000",
     },
   ];
@@ -70,23 +70,29 @@ const MainLayout = ({ children }: ILayout) => {
       <main className="flex-1 bg-gray-200 overflow-y-auto p-4 relative">
         {children}
       </main>
-      <footer className="p-4 flex justify-around mx-auto gap-4 bg-green-dark w-full">
-        {socials.map((item, index) => {
-          return (
-            <Link
-              key={index}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mx-auto text-green-light  text-center flex flex-col justify-center"
-            >
-              <p className="border border-green-dark self-center flex justify-center items-center w-10 h-10 rounded-lg">
-                {item.icon}
-              </p>
-              <p>{item.name}</p>
-            </Link>
-          );
-        })}
+      <footer className="p-4 flex justify-around mx-auto gap-4 bg-green-dark w-full flex-col">
+        <div className="block text-center text-green-light text-xl">
+          ช่องทางการติดต่อ
+        </div>
+        <hr className="bg-green-light" />
+        <div className="flex">
+          {socials.map((item, index) => {
+            return (
+              <Link
+                key={index}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-auto text-green-light  text-center flex flex-col justify-center"
+              >
+                <p className="border border-green-dark self-center flex justify-center items-center w-10 h-10 rounded-lg">
+                  {item.icon}
+                </p>
+                <p>{item.name}</p>
+              </Link>
+            );
+          })}
+        </div>
       </footer>
       <section className="p-2 sticky bottom-0 bg-white drop-shadow-md">
         <div className="flex gap-4 text-center p-4">

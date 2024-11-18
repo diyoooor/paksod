@@ -14,6 +14,8 @@ export default function Layout({ children }: ILayout) {
   } = {
     "/auth": BottomLessLayout,
     "/search": BottomLessLayout,
+    "/cart": BottomLessLayout,
+    "/cart/checkout": BottomLessLayout,
   };
 
   const LayoutComponent =
