@@ -150,22 +150,27 @@ export default function Home() {
           </button>
         </div>
       </section>
-      <section className="mt-4 grid grid-flow-row gap-4 px-4">
-        {whyUs.map((item, index) => {
-          return (
-            <div key={index} className="text-center bg-white rounded-xl">
-              <div className="p-4 flex flex-col">
-                <p className="mx-auto">{item.icon}</p>
-                <h1 className="text-3xl font-semibold py-4">{item.topic}</h1>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  consectetur, nisi sed viverra ultricies, nunc odio consectetur
-                  ligula, ac varius sem lectus ut velit.
-                </p>
-              </div>
+      <section className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+        {whyUs.map((item, index) => (
+          <div
+            key={index}
+            className="text-center bg-white shadow-md hover:shadow-lg rounded-xl transition-shadow duration-300"
+          >
+            <div className="p-6 flex flex-col items-center">
+              <div className="text-green-500 text-5xl mb-4">{item.icon}</div>
+
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">
+                {item.topic}
+              </h2>
+
+              <p className="text-gray-600 leading-relaxed">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                consectetur, nisi sed viverra ultricies, nunc odio consectetur
+                ligula, ac varius sem lectus ut velit.
+              </p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </section>
     </div>
   );
