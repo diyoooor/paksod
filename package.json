@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "@tabler/icons-react": "^3.22.0",
+    "mongodb": "^6.11.0",
     "next": "15.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-toastify": "^10.0.6",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {

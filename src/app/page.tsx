@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ICategories {
   id: number;
@@ -141,7 +142,10 @@ export default function Home() {
           })}
         </div>
         <div className="w-full mt-4 flex">
-          <button className="mx-auto rounded-lg bg-green-dark w-3/5">
+          <button
+            className="mx-auto rounded-lg bg-green-dark w-3/5"
+            onClick={() => router.push("/product")}
+          >
             <p className="text-lg font-semibold text-white p-2">ดูทั้งหมด</p>
           </button>
         </div>

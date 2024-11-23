@@ -1,5 +1,6 @@
 "use client";
 
+import { fetcher } from "@/utils/fetcher";
 import {
   IconPower,
   IconSquareRoundedArrowUp,
@@ -8,7 +9,8 @@ import {
   IconCircleCheck,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 interface Order {
   id: string;
@@ -51,6 +53,12 @@ const ProfilePage = () => {
     },
   ];
 
+  const { data, error, isLoading } = useSWR("/api/users", fetcher);
+
+  console.dir(data);
+  console.log(error);
+  console.log(isLoading);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>();
@@ -62,8 +70,6 @@ const ProfilePage = () => {
     phoneNumber: "-",
     address: "-",
   });
-
-  useEffect(() => {}, []);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);

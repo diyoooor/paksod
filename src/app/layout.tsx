@@ -1,10 +1,11 @@
 "use client";
-import "./globals.css";
+import "../styles/globals.css";
 import RootLayout, { ILayout } from "@/components/Layouts/RootLayout";
 import { usePathname } from "next/navigation";
 import MainLayout from "@/components/Layouts/MainLayout";
 import BottomLessLayout from "@/components/Layouts/BottomLessLayout";
 import { FC } from "react";
+import { ToastContainer } from "react-toastify";
 
 export default function Layout({ children }: ILayout) {
   const pathName = usePathname();
@@ -23,7 +24,10 @@ export default function Layout({ children }: ILayout) {
 
   return (
     <RootLayout>
-      <LayoutComponent>{children}</LayoutComponent>
+      <LayoutComponent>
+        {children}
+        <ToastContainer position="top-right" autoClose={3000} />
+      </LayoutComponent>
     </RootLayout>
   );
 }
