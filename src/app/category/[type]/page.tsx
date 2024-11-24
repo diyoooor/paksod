@@ -1,13 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import CardProduct from "@/app/product/components/CardProduct";
+import Loading from "@/components/Loading/Loading";
+import { fetcher } from "@/utils/fetcher";
 import { use, useEffect, useState } from "react";
-
-interface ICategory {
-  id: number;
-  name: string;
-  icon: React.ReactNode;
-}
+import useSWR from "swr";
 
 export default function CategoryType({
   params,
@@ -201,6 +198,15 @@ export default function CategoryType({
     }
   }, [category]);
 
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useSWR(`/api/products/category?category=${category}`, fetcher);
+
+  if (isLoading) return <Loading />;
+  if (error) return <p>เกิดข้อ��ิดพลา��ในการ��หลดข้อมูลสินค้า</p>;
+
   return (
     <div>
       <section className="text-center py-4">
@@ -234,29 +240,8 @@ export default function CategoryType({
       </section>
       <section>
         <div className="grid grid-cols-2 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((item, index) => {
-            return (
-              <div key={index} className="bg-white rounded-xl ">
-                <Image
-                  alt={"highlight"}
-                  src={`/products/broccoli.png`}
-                  width={100}
-                  height={90}
-                  className="object-contain mx-auto py-10 drop-shadow-sm h-48 w-fit"
-                />
-                <div className="p-2">
-                  <p className="text-xl font-semibold text-green-dark">
-                    สินค้าที่ {index}
-                  </p>
-                  <p>กิโลกรัมละ 15 </p>
-                </div>
-                <div className="p-2">
-                  <button className="w-full h-10 bg-green-dark text-white font-semibold rounded-xl">
-                    สั่งซื้อ
-                  </button>
-                </div>
-              </div>
-            );
+          {products.map((item, index) => {
+            return <CardProduct item={item} key={index} />;
           })}
         </div>
       </section>

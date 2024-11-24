@@ -5,9 +5,12 @@ import { usePathname } from "next/navigation";
 import MainLayout from "@/components/Layouts/MainLayout";
 import BottomLessLayout from "@/components/Layouts/BottomLessLayout";
 import { FC } from "react";
-import { ToastContainer } from "react-toastify";
+import { useLiff } from "@/hooks/useLiff";
+const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "";
 
 export default function Layout({ children }: ILayout) {
+  useLiff(LIFF_ID);
+
   const pathName = usePathname();
 
   const layoutConfig: {
@@ -24,10 +27,7 @@ export default function Layout({ children }: ILayout) {
 
   return (
     <RootLayout>
-      <LayoutComponent>
-        {children}
-        <ToastContainer position="top-right" autoClose={3000} />
-      </LayoutComponent>
+      <LayoutComponent>{children}</LayoutComponent>
     </RootLayout>
   );
 }
