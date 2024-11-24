@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 import MainLayout from "@/components/Layouts/MainLayout";
 import BottomLessLayout from "@/components/Layouts/BottomLessLayout";
 import { FC } from "react";
-import { useLiff } from "@/hooks/useLiff";
-const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "";
+import useLiffAuth from "@/hooks/useLiff";
 
 export default function Layout({ children }: ILayout) {
-  useLiff(LIFF_ID);
+  useLiffAuth();
 
   const pathName = usePathname();
 

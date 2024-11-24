@@ -102,6 +102,7 @@ export default function Home() {
           <Image
             alt={"banner"}
             src={"/images/logo/banner.png"}
+            priority
             width={400}
             height={190}
             className=" object-contain"

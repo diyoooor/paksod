@@ -11,8 +11,9 @@ const Menu = () => {
         src="/images/logo/logo.png"
         alt="นุ้ย ผักสด Logo"
         width={70}
+        priority
         height={30}
-        className="cursor-pointer"
+        className="cursor-pointer w-auto h-auto"
         onClick={() => router.push("/")}
       />
       <nav>

@@ -14,6 +14,7 @@ const Header = () => {
           width={70}
           height={30}
           className="h-fit w-fit"
+          priority
         />
       </h1>
       <nav>
