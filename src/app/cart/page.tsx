@@ -7,7 +7,7 @@ import React from "react";
 const CartPage = () => {
   const router = useRouter();
   return (
-    <div className="w-full">
+    <div className="w-full relative max-w-lg ">
       <section className="text-center py-4">
         <p className="text-3xl font-bold">ตะกร้าสินค้า</p>
       </section>
@@ -53,7 +53,7 @@ const CartPage = () => {
           })}
         </ul>
       </section>
-      <section className="fixed bottom-0 bg-white w-full left-0 p-4 h-fit">
+      <section className="fixed bottom-0 bg-white w-full left-0 p-4 h-fit ">
         <div className="text-2xl my-2 inline-flex justify-between w-full font-bold">
           <p>ทั้งหมด</p>
           <p>฿ 1000</p>
