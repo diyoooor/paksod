@@ -1,4 +1,4 @@
-import clientPromise from "@/utils/mongodb";
+import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { fetcher } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconCarrot,
   IconFish,
@@ -22,7 +22,11 @@ interface ICategories {
 }
 
 const ProductsPage = () => {
-  const { data: products, isLoading, error } = useSWR("/api/products", fetcher);
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useSWR("/api/products", (url) => fetcherWithHeaders(url));
   const [category, setCategory] = useState("all");
   const [sortOption, setSortOption] = useState("none");
 

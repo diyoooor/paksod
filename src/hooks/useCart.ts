@@ -1,28 +1,25 @@
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import useSWR from "swr";
 
-const fetcher = async (url: string) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return response.json();
-};
-
 export const useCart = () => {
-  const { data, error, mutate } = useSWR("/api/cart", fetcher);
+  const { data, error, mutate } = useSWR("/api/cart", (url) =>
+    fetcherWithHeaders(url)
+  );
 
   const addToCart = async (
     productId: string,
     priceId: number,
-    quantity: number
+    quantity: number,
+    unit: string
   ) => {
     try {
       const response = await fetch("/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("id_token")}`,
         },
-        body: JSON.stringify({ productId, priceId, quantity }),
+        body: JSON.stringify({ productId, priceId, quantity, unit }),
       });
 
       if (!response.ok) {

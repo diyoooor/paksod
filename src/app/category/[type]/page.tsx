@@ -2,7 +2,7 @@
 
 import CardProduct from "@/app/product/components/CardProduct";
 import Loading from "@/components/Loading/Loading";
-import { fetcher } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import { use, useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -202,7 +202,7 @@ export default function CategoryType({
     data: products,
     isLoading,
     error,
-  } = useSWR(`/api/products/category?category=${category}`, fetcher);
+  } = useSWR(`/api/products/category?category=${category}`, fetcherWithHeaders);
 
   if (isLoading) return <Loading />;
   if (error) return <p>เกิดข้อ��ิดพลา��ในการ��หลดข้อมูลสินค้า</p>;

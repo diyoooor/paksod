@@ -1,16 +1,13 @@
-import { authenticateToken } from "@/utils/authentication";
-import clientPromise from "@/utils/mongodb";
+import clientPromise from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const lineUserId = authenticateToken(req);
-
     const client = await clientPromise;
     const db = client.db();
     const usersCollection = db.collection("users");
 
-    const user = await usersCollection.findOne({ lineUserId });
+    const user = await usersCollection.findOne();
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

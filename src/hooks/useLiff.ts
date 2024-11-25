@@ -23,6 +23,9 @@ const useLiffAuth = () => {
           });
         } else {
           const profile = await liff.getProfile();
+          const idToken = await liff.getAccessToken();
+
+          localStorage.setItem("id_token", idToken);
 
           await saveUserToDatabase({
             lineUserId: profile.userId,

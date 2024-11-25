@@ -26,6 +26,7 @@ interface AddToCartModalProps {
   onAddToCart: (item: {
     productId: string;
     priceId: number;
+    unit: string;
     quantity: number;
   }) => void;
 }
@@ -37,6 +38,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   onAddToCart,
 }) => {
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 
   if (!isOpen) return null;
@@ -49,9 +51,15 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
     onAddToCart({
       productId: product._id,
       priceId: selectedPrice,
+      unit: selectedUnit,
       quantity,
     });
     onClose();
+  };
+
+  const handleChangeUnit = (price: Price) => {
+    setSelectedPrice(price.id);
+    setSelectedUnit(price.label);
   };
 
   return (
@@ -82,7 +90,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
             {product.prices.map((price) => (
               <button
                 key={price.id}
-                onClick={() => setSelectedPrice(price.id)}
+                onClick={() => handleChangeUnit(price)}
                 className={`px-4 py-2 border rounded-lg ${
                   selectedPrice === price.id
                     ? "bg-green-500 text-white"
