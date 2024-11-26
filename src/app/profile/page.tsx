@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading/Loading";
+import { useUser } from "@/hooks/useUser";
 import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconPower,
@@ -54,12 +55,6 @@ const ProfilePage = () => {
     },
   ];
 
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useSWR("/api/users", fetcherWithHeaders);
-
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>();
@@ -93,10 +88,6 @@ const ProfilePage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-
-  if (isLoading) return <Loading />;
-  if (error) return <p>เกิดข้อ��ิดพลา��ในการเชื่อมต่อ��านข้อมูล</p>;
-  console.log(user);
 
   return (
     <div className="  p-4">
