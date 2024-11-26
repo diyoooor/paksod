@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import { fetcher } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import Image from "next/image";
 import { use } from "react";
 import useSWR from "swr";
@@ -16,7 +16,7 @@ export default function ProductDetail({ params }: IProductDetail) {
     data: product,
     isLoading,
     error,
-  } = useSWR(`/api/products?id=${id}`, fetcher);
+  } = useSWR(`/api/products?id=${id}`, fetcherWithHeaders);
 
   if (isLoading) return <Loading />;
   if (error) return <p>เกิดข้อ��ิดพลา��ในการ��หลดข้อมูลสินค้า</p>;

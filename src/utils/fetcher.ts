@@ -1,7 +1,7 @@
 export const fetcherWithHeaders = async (
   url: string,
   method: string = "GET",
-  body?: any
+  body?: unknown
 ) => {
   const headers = {
     "Content-Type": "application/json",

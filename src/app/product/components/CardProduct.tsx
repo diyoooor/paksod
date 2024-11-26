@@ -26,14 +26,14 @@ interface Product {
 
 const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { addToCart } = useCart();
+  const { addProduct } = useCart();
   const handleAddToCart = (item: {
     productId: string;
     priceId: number;
     quantity: number;
     unit: string;
   }) => {
-    addToCart(item.productId, item.priceId, item.quantity, item.unit);
+    addProduct(item.productId, item.priceId, item.quantity, item.unit);
   };
 
   return (

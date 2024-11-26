@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
     // Fetch related product details for each item in the cart
     const productsWithDetails = await Promise.all(
-      userCart.products.map(async (item: any) => {
+      userCart.products.map(async (item) => {
         const productDetails = await productCollection.findOne(
           { _id: new BSON.ObjectId(item.productId) },
           { projection: { _id: 0, name: 1, image: 1, prices: 1 } }
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
 
     if (userCart) {
       const existingProductIndex = userCart.products.findIndex(
-        (item: any) => item.productId === productId
+        (item: { productId }) => item.productId === productId
       );
 
       if (existingProductIndex > -1) {
