@@ -1,8 +1,5 @@
 "use client";
 
-import Loading from "@/components/Loading/Loading";
-import { useUser } from "@/hooks/useUser";
-import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconPower,
   IconSquareRoundedArrowUp,
@@ -12,7 +9,6 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import React, { useState } from "react";
-import useSWR from "swr";
 
 interface Order {
   id: string;
