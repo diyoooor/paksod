@@ -11,16 +11,18 @@ const Navbar = () => {
         <button
           onClick={() => router.push("/")}
           aria-label="Home"
-          className="focus:outline-none"
+          className="focus:outline-none inline-flex flex-col text-center  items-center"
         >
-          <IconHome className="w-12 h-12 text-green-black" stroke={1} />
+          <IconHome className="w-8 h-8 text-green-black" stroke={1} />
+          <p className="text-xs">หน้าหลัก</p>
         </button>
         <button
           onClick={() => router.push("/search")}
           aria-label="Search"
-          className="focus:outline-none"
+          className="focus:outline-none inline-flex flex-col text-center  items-center"
         >
-          <IconSearch className="w-12 h-12 text-green-dark" stroke={1} />
+          <IconSearch className="w-8 h-8 text-green-dark" stroke={1} />
+          <p className="text-xs">ค้นหา</p>
         </button>
       </div>
     </nav>

@@ -126,15 +126,14 @@ const ProfilePage = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block font-semibold">ชื่อ</label>
-
+                <p className="block font-semibold">ชื่อ</p>
                 <p className="text-lg h-12 font-semibold block border rounded-xl bg-gray-100 p-2">
                   {userInfo.displayName}
                 </p>
               </div>
 
               <div className="mb-4">
-                <label className="block font-semibold">ชื่อร้าน</label>
+                <p className="block font-semibold">ชื่อร้าน</p>
                 {isEditing ? (
                   <input
                     type="text"
@@ -151,7 +150,7 @@ const ProfilePage = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block font-semibold">เบอร์โทรศัพท์</label>
+                <p className="block font-semibold">เบอร์โทรศัพท์</p>
                 {isEditing ? (
                   <input
                     type="text"
@@ -168,7 +167,7 @@ const ProfilePage = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block font-semibold">รายละเอียดที่อยู่</label>
+                <p className="block font-semibold">รายละเอียดที่อยู่</p>
                 {isEditing ? (
                   <textarea
                     name="address"
@@ -251,8 +250,8 @@ const ProfilePage = () => {
                     <div className="mt-4">
                       <h3 className="text-lg font-semibold">รายการสินค้า</h3>
                       <ul className="list-disc list-inside">
-                        {order.items.map((item, index) => (
-                          <li key={index}>
+                        {order.items.map((item) => (
+                          <li key={item.name}>
                             {item.name} - จำนวน {item.quantity} - ราคา ฿
                             {(item.price * item.quantity).toFixed(2)}
                           </li>
@@ -263,8 +262,11 @@ const ProfilePage = () => {
                         Timeline การจัดส่ง
                       </h3>
                       <div className="space-y-2">
-                        {order.timeline.map((step, index) => (
-                          <div key={index} className="flex  items-baseline">
+                        {order.timeline.map((step) => (
+                          <div
+                            key={step.label}
+                            className="flex  items-baseline"
+                          >
                             <div className={`h-4 w-4 rounded-full mr-2 `}>
                               {step.completed ? (
                                 <IconCircleCheckFilled color="green" />

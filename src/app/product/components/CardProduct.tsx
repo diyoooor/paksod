@@ -44,12 +44,12 @@ const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
           src={item.image}
           width={100}
           height={90}
-          className="object-contain mx-auto py-6 drop-shadow-sm h-40 w-auto"
+          className="object-contain mx-auto p-6 drop-shadow-sm h-fit w-auto"
         />
-        <div className="px-4 py-2 text-center">
+        <div className="py-2 text-center">
           <p className="text-lg font-bold text-gray-800">{item.name}</p>
-          {item.prices.map((prices, idx) => (
-            <p key={idx} className="text-sm text-gray-600">
+          {item.prices.map((prices) => (
+            <p key={prices.label} className="text-sm text-gray-600">
               {prices.label}:{" "}
               <span className="text-green-700 font-semibold">
                 {prices.value} บาท
@@ -57,7 +57,7 @@ const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
             </p>
           ))}
         </div>
-        <div className="mt-auto p-4">
+        <div className="mt-auto p-2">
           <button
             className="w-full h-12 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors duration-300 ease-in-out"
             onClick={() => setIsModalOpen(true)}
