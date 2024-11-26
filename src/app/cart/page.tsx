@@ -4,9 +4,8 @@ import { fetcherWithHeaders } from "@/utils/fetcher";
 import { IconShoppingBag, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useSWR from "swr";
-import debounce from "lodash.debounce";
 import Swal from "sweetalert2";
 
 const CartPage = () => {
@@ -18,7 +17,6 @@ const CartPage = () => {
   } = useSWR("/api/cart", fetcherWithHeaders);
   const [carts, setCarts] = useState([]);
 
-  // Sync cart data from SWR with local state
   useEffect(() => {
     if (cart) {
       setCarts(cart.products);
@@ -34,22 +32,6 @@ const CartPage = () => {
       0
     );
   };
-
-  const updateQuantityAPI = async (productId, quantity) => {
-    try {
-      await fetcherWithHeaders(`/api/cart`, "PUT", { productId, quantity });
-      mutate();
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
-  };
-
-  const debouncedUpdateQuantity = useCallback(
-    debounce((productId, quantity) => {
-      updateQuantityAPI(productId, quantity);
-    }, 500),
-    []
-  );
 
   const handleQuantityChange = (productId, currentQuantity, change) => {
     const newQuantity = currentQuantity + change;
@@ -72,7 +54,6 @@ const CartPage = () => {
         item.productId === productId ? { ...item, quantity: newQuantity } : item
       )
     );
-    debouncedUpdateQuantity(productId, newQuantity);
   };
 
   const handleRemoveItem = async (productId) => {
@@ -135,7 +116,7 @@ const CartPage = () => {
 
             return (
               <li
-                key={index}
+                key={`${index}-${item.productId}`}
                 className="h-32 border inline-flex w-full items-center bg-white p-2 first:rounded-t-lg last:rounded-b-lg relative"
               >
                 <Image

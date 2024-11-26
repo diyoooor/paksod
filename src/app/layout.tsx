@@ -7,7 +7,7 @@ import BottomLessLayout from "@/components/Layouts/BottomLessLayout";
 import { FC } from "react";
 import useLiffAuth from "@/hooks/useLiff";
 
-export default function Layout({ children }: ILayout) {
+export default function Layout({ children }: Readonly<ILayout>) {
   useLiffAuth();
 
   const pathName = usePathname();

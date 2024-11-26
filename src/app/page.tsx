@@ -51,22 +51,22 @@ export default function Home() {
     {
       id: 3,
       name: "เนื้อสัตว์",
-      icon: <IconMeat className="h-9 w-9" stroke={1.5} />,
+      icon: <IconMeat className="h-7 w-7" stroke={1.5} />,
     },
     {
       id: 4,
       name: "เครื่องปรุง",
-      icon: <IconBottle className="h-9 w-9" stroke={1.5} />,
+      icon: <IconBottle className="h-7 w-7" stroke={1.5} />,
     },
     {
       id: 5,
       name: "ไข่",
-      icon: <IconEggs className="h-9 w-9" stroke={1.5} />,
+      icon: <IconEggs className="h-7 w-7" stroke={1.5} />,
     },
     {
       id: 6,
       name: "ผักดอง",
-      icon: <IconClockHour3 className="h-9 w-9" stroke={1.5} />,
+      icon: <IconClockHour3 className="h-7 w-7" stroke={1.5} />,
     },
   ];
 
@@ -97,7 +97,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="inset-0 w-screen -mt-4 -mx-4 m-0 h-64 ">
+      <section className="inset-0 w-screen -mt-4 -mx-4 m-0 h-fit">
         <div>
           <Image
             alt={"banner"}
@@ -110,16 +110,16 @@ export default function Home() {
         </div>
       </section>
       <section className="flex mt-4 flex-nowrap overflow-auto max-w-screen gap-4">
-        {categories.map((item, index) => {
+        {categories.map((item) => {
           return (
-            <div
-              key={index}
+            <button
+              key={item.name}
               className="min-w-30 py-3 px-4 rounded-xl flex items-center gap-2 bg-white text-nowrap"
               onClick={() => router.push(`/category/${item.name}`)}
             >
               <p>{item.icon}</p>
-              <p className="text-xl">{item.name}</p>
-            </div>
+              <p className="text-lg">{item.name}</p>
+            </button>
           );
         })}
       </section>
@@ -129,8 +129,8 @@ export default function Home() {
           สินค้าแนะนำ
         </h1>
         <div className="grid grid-cols-2 gap-4">
-          {products.map((item, index) => {
-            return <CardProduct item={item} key={index} />;
+          {products.map((item) => {
+            return <CardProduct item={item} key={item.name} />;
           })}
         </div>
         <div className="w-full mt-4 flex">
@@ -143,9 +143,9 @@ export default function Home() {
         </div>
       </section>
       <section className="mt-8 grid grid-cols-1 gap-6 px-4">
-        {whyUs.map((item, index) => (
+        {whyUs.map((item) => (
           <div
-            key={index}
+            key={item.topic}
             className="text-center bg-white shadow-md hover:shadow-lg rounded-xl transition-shadow duration-300"
           >
             <div className="p-6 flex flex-col items-center">
