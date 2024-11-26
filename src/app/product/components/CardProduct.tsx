@@ -31,8 +31,9 @@ const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
     productId: string;
     priceId: number;
     quantity: number;
+    unit: string;
   }) => {
-    addToCart(item.productId, item.priceId, item.quantity);
+    addToCart(item.productId, item.priceId, item.quantity, item.unit);
   };
 
   return (

@@ -1,6 +1,8 @@
 "use client";
 
-import { fetcher } from "@/utils/fetcher";
+import Loading from "@/components/Loading/Loading";
+import { useUser } from "@/hooks/useUser";
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconPower,
   IconSquareRoundedArrowUp,
@@ -52,12 +54,6 @@ const ProfilePage = () => {
       ],
     },
   ];
-
-  const { data, error, isLoading } = useSWR("/api/users", fetcher);
-
-  console.dir(data);
-  console.log(error);
-  console.log(isLoading);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState("profile");

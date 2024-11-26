@@ -13,12 +13,15 @@
     "@prisma/client": "^5.22.0",
     "@tabler/icons-react": "^3.22.0",
     "jsonwebtoken": "^9.0.2",
+    "lodash.debounce": "^4.0.8",
     "mongodb": "^6.11.0",
     "next": "15.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "sweetalert2": "^11.14.5",
     "swr": "^2.2.5",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

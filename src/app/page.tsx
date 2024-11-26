@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import { fetcher } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconBottle,
   IconCarrot,
@@ -36,7 +36,7 @@ export default function Home() {
     data: products,
     isLoading,
     error,
-  } = useSWR("/api/products/highlight", fetcher);
+  } = useSWR("/api/products/highlight", fetcherWithHeaders);
   const categories: ICategories[] = [
     {
       id: 1,
