@@ -2,7 +2,7 @@ import { IconHeart } from "@tabler/icons-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import AddToCartModal from "./AddToCart";
-import { useCart } from "@/hooks/useCart";
+import { useCartStore } from "@/store/useCartStore";
 
 interface ICardProductProps {
   item: Product;
@@ -26,14 +26,9 @@ interface Product {
 
 const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { addProduct } = useCart();
-  const handleAddToCart = (item: {
-    productId: string;
-    priceId: number;
-    quantity: number;
-    unit: string;
-  }) => {
-    addProduct(item.productId, item.priceId, item.quantity, item.unit);
+  const { addToCart } = useCartStore();
+  const handleAddToCart = (productId, priceId, qty, unit) => {
+    addToCart(productId, priceId, qty, unit);
   };
 
   return (

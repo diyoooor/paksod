@@ -23,12 +23,12 @@ interface AddToCartModalProps {
   product: Product;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (item: {
-    productId: string;
-    priceId: number;
-    unit: string;
-    quantity: number;
-  }) => void;
+  onAddToCart: (
+    productId: string | number,
+    priceId: number | string,
+    qty: number,
+    unit: string
+  ) => void;
 }
 
 const AddToCartModal: React.FC<AddToCartModalProps> = ({
@@ -37,8 +37,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   onClose,
   onAddToCart,
 }) => {
-  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
-  const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<Price | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 
   if (!isOpen) return null;
@@ -48,18 +47,13 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
       alert("กรุณาเลือกตัวเลือกสินค้า");
       return;
     }
-    onAddToCart({
-      productId: product._id,
-      priceId: selectedPrice,
-      unit: selectedUnit,
-      quantity,
-    });
+
+    onAddToCart(product._id, selectedPrice.id, quantity, selectedPrice.label);
     onClose();
   };
 
   const handleChangeUnit = (price: Price) => {
-    setSelectedPrice(price.id);
-    setSelectedUnit(price.label);
+    setSelectedPrice(price);
   };
 
   return (
@@ -92,7 +86,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 key={price.id}
                 onClick={() => handleChangeUnit(price)}
                 className={`px-4 py-2 border rounded-lg ${
-                  selectedPrice === price.id
+                  selectedPrice === price
                     ? "bg-green-500 text-white"
                     : "bg-gray-100"
                 }`}

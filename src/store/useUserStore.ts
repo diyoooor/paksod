@@ -1,21 +1,33 @@
 import { create } from "zustand";
 
-interface User {
+export interface User {
   id: string;
   name: string;
+  email: string;
+  address: string;
 }
 
 interface UserState {
-  users: User[];
-  addUser: (user: User) => void;
-  removeUser: (id: string) => void;
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  users: [],
-  addUser: (user) => set((state) => ({ users: [...state.users, user] })),
-  removeUser: (id) =>
+  user: null,
+
+  login: (user) => {
+    set({ user });
+  },
+
+  logout: () => {
+    set({ user: null });
+  },
+
+  updateUser: (userData) => {
     set((state) => ({
-      users: state.users.filter((user) => user.id !== id),
-    })),
+      user: { ...state.user, ...userData } as User,
+    }));
+  },
 }));

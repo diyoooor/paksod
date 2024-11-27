@@ -33,7 +33,14 @@ export async function GET(req: NextRequest) {
     const userCart = await cartCollection.findOne({ userId: userData.userId });
 
     if (!userCart) {
-      return NextResponse.json({ message: "Cart not found" }, { status: 404 });
+      const newCart = {
+        userId: userData.userId,
+        products: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      await cartCollection.insertOne(newCart);
     }
 
     // Fetch related product details for each item in the cart
@@ -88,13 +95,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (
-      !productId ||
-      !priceId ||
-      typeof quantity !== "number" ||
-      quantity <= 0 ||
-      !unit
-    ) {
+    if (!productId || !priceId || quantity <= 0 || !unit) {
       return NextResponse.json(
         { error: "Invalid product, price, unit, or quantity" },
         { status: 400 }
@@ -123,7 +124,6 @@ export async function POST(req: NextRequest) {
         userCart.products.push({ productId, priceId, quantity, unit });
       }
 
-      // Update the user's cart in the database
       await cartCollection.updateOne(
         { userId: userData.userId },
         {
@@ -161,15 +161,156 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function DELETE() {
+export async function PUT(req: NextRequest) {
   try {
+    // Parse request payload
+    const { productId, priceId, quantity, unit } = await req.json();
+
+    // Check authorization header
+    const authorizationHeader = req.headers.get("authorization");
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Authorization header is required" },
+        { status: 401 }
+      );
+    }
+
+    // Verify token and extract user data
+    const token = authorizationHeader.split(" ")[1];
+    const userData = await verifyLineTokens(token);
+
+    if (!userData || !userData.userId) {
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 403 }
+      );
+    }
+
+    // Validate request payload
+    if (
+      !productId ||
+      !priceId ||
+      typeof quantity !== "number" ||
+      quantity < 0 ||
+      !unit
+    ) {
+      return NextResponse.json(
+        { error: "Invalid product, price, unit, or quantity" },
+        { status: 400 }
+      );
+    }
+
+    // Connect to the database
     const client = await clientPromise;
     const db = client.db();
     const cartCollection = db.collection("cart");
 
-    await cartCollection.deleteMany({});
+    // Find user's cart
+    const userCart = await cartCollection.findOne({ userId: userData.userId });
 
-    return NextResponse.json({ message: "Cart cleared" });
+    if (userCart) {
+      // Check if the product exists in the cart
+      const existingProductIndex = userCart.products.findIndex(
+        (item: { productId: string }) => item.productId === productId
+      );
+
+      if (existingProductIndex > -1) {
+        // If quantity is 0 or less, remove the product
+        if (quantity === 0) {
+          userCart.products.splice(existingProductIndex, 1);
+        } else {
+          // Update the existing product
+          userCart.products[existingProductIndex] = {
+            productId,
+            priceId,
+            quantity,
+            unit,
+          };
+        }
+      } else if (quantity > 0) {
+        // Add the new product
+        userCart.products.push({ productId, priceId, quantity, unit });
+      }
+
+      // Update the cart in the database
+      await cartCollection.updateOne(
+        { userId: userData.userId },
+        {
+          $set: {
+            products: userCart.products,
+            updatedAt: new Date(),
+          },
+        }
+      );
+    } else {
+      const newCart = {
+        userId: userData.userId,
+        products: quantity > 0 ? [{ productId, priceId, quantity, unit }] : [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      await cartCollection.insertOne(newCart);
+    }
+
+    // Retrieve the updated cart
+    const updatedCart = await cartCollection.findOne({
+      userId: userData.userId,
+    });
+
+    return NextResponse.json({
+      message: "Cart updated successfully",
+      cart: updatedCart,
+    });
+  } catch (error) {
+    console.error("Error updating cart:", error);
+    return NextResponse.json(
+      { error: "Failed to update cart" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    // Extract authorization header
+    const authorizationHeader = req.headers.get("authorization");
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Authorization header is required" },
+        { status: 401 }
+      );
+    }
+
+    // Verify token and extract user data
+    const token = authorizationHeader.split(" ")[1];
+    const userData = await verifyLineTokens(token);
+
+    if (!userData || !userData.userId) {
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 403 }
+      );
+    }
+
+    // Connect to the database
+    const client = await clientPromise;
+    const db = client.db();
+    const cartCollection = db.collection("cart");
+
+    // Delete only the cart for the specific user
+    const deleteResult = await cartCollection.deleteOne({
+      userId: userData.userId,
+    });
+
+    if (deleteResult.deletedCount === 0) {
+      return NextResponse.json(
+        { error: "Cart not found for the user" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Cart cleared successfully" });
   } catch (error) {
     console.error("Error clearing cart:", error);
     return NextResponse.json(

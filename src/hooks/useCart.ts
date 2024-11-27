@@ -49,7 +49,6 @@ export const useCart = () => {
     []
   );
 
-  // Handle removing a product from the cart
   const removeProduct = async (productId) => {
     try {
       Swal.fire({
@@ -62,7 +61,7 @@ export const useCart = () => {
         if (result.isConfirmed) {
           setCart((prev) =>
             prev.filter((item) => item.productId !== productId)
-          ); // Optimistic update
+          );
           await fetcherWithHeaders(`/api/cart/${productId}`, "DELETE");
           mutate();
         }
@@ -72,7 +71,6 @@ export const useCart = () => {
     }
   };
 
-  // Handle clearing the entire cart
   const clearCart = async () => {
     try {
       Swal.fire({

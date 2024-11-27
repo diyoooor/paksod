@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import liff from "@line/liff";
+import axiosInstance from "@/lib/axiosInstance";
 
 const useLiffAuth = () => {
   useEffect(() => {
@@ -26,7 +27,6 @@ const useLiffAuth = () => {
           const idToken = await liff.getAccessToken();
 
           localStorage.setItem("id_token", idToken);
-
           await saveUserToDatabase({
             lineUserId: profile.userId,
             displayName: profile.displayName,
@@ -48,15 +48,12 @@ const saveUserToDatabase = async (user: {
   pictureUrl: string;
 }) => {
   try {
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const response = await axiosInstance.post(
+      "/api/users",
+      JSON.stringify(user)
+    );
 
-    if (!response.ok) {
+    if (!response.data) {
       throw new Error("Failed to save user to the database");
     }
 
