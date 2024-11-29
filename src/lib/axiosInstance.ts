@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.warn("Unauthorized! Redirecting to login.");
-      window.location.href = "/sign-in";
+      window.location.reload();
     } else if (error.response?.status === 500) {
       console.error("Server error! Please try again later.");
     } else {

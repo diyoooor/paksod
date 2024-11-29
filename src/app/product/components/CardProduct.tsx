@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import AddToCartModal from "./AddToCart";
 import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "next/navigation";
 
 interface ICardProductProps {
   item: Product;
@@ -27,6 +28,7 @@ interface Product {
 const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToCart } = useCartStore();
+  const router = useRouter();
   const handleAddToCart = (productId, priceId, qty, unit) => {
     addToCart(productId, priceId, qty, unit);
   };
@@ -40,6 +42,7 @@ const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
           width={100}
           height={90}
           className="object-contain mx-auto p-6 drop-shadow-sm h-fit w-auto"
+          onClick={() => router.push(`/product/${item._id}`)}
         />
         <div className="py-2 text-center">
           <p className="text-lg font-bold text-gray-800">{item.name}</p>

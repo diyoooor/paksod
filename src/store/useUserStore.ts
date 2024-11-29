@@ -1,33 +1,49 @@
+import axiosInstance from "@/lib/axiosInstance";
 import { create } from "zustand";
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  address: string;
+  displayName: string;
+  pictureUrl: string;
+  address?: string;
+  shopName?: string;
+  phoneNumber?: string;
 }
 
 interface UserState {
   user: User | null;
-  login: (user: User) => void;
+  isUSerLoading: boolean;
+  getUser: () => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
+  isUSerLoading: false,
+  getUser: async () => {
+    set({ isUSerLoading: true });
+    try {
+      const response = await axiosInstance.get("/api/users");
+      const res = response.data;
 
-  login: (user) => {
-    set({ user });
+      set({ user: res });
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+      set({ isUSerLoading: false });
+    }
   },
 
   logout: () => {
     set({ user: null });
   },
 
-  updateUser: (userData) => {
-    set((state) => ({
-      user: { ...state.user, ...userData } as User,
-    }));
+  updateUser: async (userInfo) => {
+    try {
+      const { data } = await axiosInstance.put("/api/users", userInfo);
+      set({ user: data });
+    } catch (error) {
+      console.error("Failed to update user:", error);
+    }
   },
 }));
