@@ -3,7 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["profile.line-scdn.net"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'profile.line-scdn.net',
+        port: '',
+        pathname: '',
+        search: '',
+      },
+    ]
   },
 };
 

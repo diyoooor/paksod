@@ -43,13 +43,13 @@ export const useCartStore = create<CartState>((set, get) => ({
   fetchCart: async () => {
     set({ isCartLoading: true });
     try {
-      const response = await axiosInstance.get("/api/cart");
-      const { products } = response.data;
-      set({
-        cartItems: products,
-        totalItems: products.length,
-        isCartLoading: false,
-      });
+      // const response = await axiosInstance.get("/api/cart");
+      // const { products } = response.data;
+      // set({
+      //   cartItems: products,
+      //   totalItems: products.length,
+      //   isCartLoading: false,
+      // });
     } catch (error) {
       console.error("Error fetching cart:", error);
       set({ isCartLoading: false });
@@ -89,8 +89,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         quantity === 1
           ? existingItem.quantity + 1
           : quantity === -1
-          ? existingItem.quantity - 1
-          : existingItem.quantity + quantity;
+            ? existingItem.quantity - 1
+            : existingItem.quantity + quantity;
 
       if (newQuantity < 1) {
         const confirmDelete = window.confirm(

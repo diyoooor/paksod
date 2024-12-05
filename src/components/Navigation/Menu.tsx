@@ -1,11 +1,11 @@
-import { useCartStore } from "@/store/useCartStore";
-import { IconBasket, IconUser } from "@tabler/icons-react";
+// import { useCartStore } from "@/store/useCartStore";
+// import { IconBasket, IconUser } from "@tabler/icons-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const Menu = () => {
-  const { totalItems } = useCartStore();
+  // const { totalItems } = useCartStore();
   const router = useRouter();
   return (
     <header className="bg-white drop-shadow-lg sticky top-0 z-10 h-20 flex items-center justify-between px-4">
@@ -19,7 +19,7 @@ const Menu = () => {
         onClick={() => router.push("/")}
       />
       <nav>
-        <ul className="flex gap-4">
+        {/* <ul className="flex gap-4">
           <li>
             <button
               onClick={() => router.push("/cart")}
@@ -27,11 +27,8 @@ const Menu = () => {
               className="focus:outline-none relative"
             >
               <IconBasket className="w-10 h-10" stroke={1} />
-              <p
-                hidden={totalItems === 0}
-                className="absolute top-0 right-0 w-6  bg-red-normal rounded-full  text-white text-xs p-1 font-bold"
-              >
-                {totalItems}
+              <p className="absolute top-0 right-0 w-6  bg-red-normal rounded-full  text-white text-xs p-1 font-bold">
+                0
               </p>
             </button>
           </li>
@@ -44,7 +41,7 @@ const Menu = () => {
               <IconUser className="w-10 h-10" stroke={1} />
             </button>
           </li>
-        </ul>
+        </ul> */}
       </nav>
     </header>
   );
