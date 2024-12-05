@@ -1,5 +1,7 @@
-import axiosInstance from "@/lib/axiosInstance";
+
+import liff from "@line/liff";
 import { create } from "zustand";
+import { useCartStore } from "./useCartStore";
 
 export interface User {
   id: string;
@@ -12,38 +14,68 @@ export interface User {
 
 interface UserState {
   user: User | null;
-  isUSerLoading: boolean;
-  getUser: () => Promise<void>;
+  isUserLoading: boolean;
+  isLoggedIn: boolean;
+  initUser: () => Promise<void>;
   logout: () => void;
-  updateUser: (userData: Partial<User>) => void;
+  // updateUser: (userData: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
-  isUSerLoading: false,
-  getUser: async () => {
-    set({ isUSerLoading: true });
+  isUserLoading: false,
+  isLoggedIn: false,
+  initUser: async () => {
+    set({ isUserLoading: true });
     try {
-      const response = await axiosInstance.get("/api/users");
-      const res = response.data;
+      const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
 
-      set({ user: res });
+      if (!liffId) {
+        throw new Error(
+          "LIFF ID is not defined. Check your environment variables."
+        );
+      }
+
+      await liff.init({ liffId });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      } else {
+
+        const profile = await liff.getProfile();
+        const accessToken = liff.getAccessToken();
+
+
+        set({
+          user: {
+            id: profile.userId,
+            displayName: profile.displayName,
+            pictureUrl: profile.pictureUrl,
+          },
+          isLoggedIn: true,
+        });
+
+        localStorage.setItem("id_token", accessToken);
+
+        useCartStore.getState().fetchCart()
+      }
     } catch (error) {
       console.error("Error fetching cart:", error);
-      set({ isUSerLoading: false });
+    } finally {
+      set({ isUserLoading: false });
     }
   },
-
   logout: () => {
-    set({ user: null });
-  },
-
-  updateUser: async (userInfo) => {
     try {
-      const { data } = await axiosInstance.put("/api/users", userInfo);
-      set({ user: data });
+      set({ isUserLoading: true });
+      localStorage.removeItem("id_token");
+      liff.logout();
+      set({ user: null });
     } catch (error) {
-      console.error("Failed to update user:", error);
+      console.log("Error logging out:", error);
+    } finally {
+      set({ isUserLoading: false });
     }
-  },
+  }
+
 }));

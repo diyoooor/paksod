@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import { getAccessToken } from "@/utils/common";
 import Swal from "sweetalert2";
 import { create } from "zustand";
 
@@ -43,13 +44,14 @@ export const useCartStore = create<CartState>((set, get) => ({
   fetchCart: async () => {
     set({ isCartLoading: true });
     try {
-      // const response = await axiosInstance.get("/api/cart");
-      // const { products } = response.data;
-      // set({
-      //   cartItems: products,
-      //   totalItems: products.length,
-      //   isCartLoading: false,
-      // });
+      const token = getAccessToken()
+      const response = await axiosInstance.get("/api/cart", { headers: { 'Authorization': 'Bearer ' + token } });
+      const { products } = response.data;
+      set({
+        cartItems: products,
+        totalItems: products.length,
+        isCartLoading: false,
+      });
     } catch (error) {
       console.error("Error fetching cart:", error);
       set({ isCartLoading: false });

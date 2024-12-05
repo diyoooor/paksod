@@ -4,3 +4,7 @@ export const numberWithCommas = (x: string | number) => {
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const getAccessToken = () => {
+  return localStorage.getItem("id_token");
+}
