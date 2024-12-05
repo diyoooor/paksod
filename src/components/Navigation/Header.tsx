@@ -9,7 +9,7 @@ const Header = () => {
     <header className=" text-white p-4 flex items-center justify-between h-20 flex-row-reverse">
       <h1 className="text-lg font-semibold">
         <Image
-          src={"/logo/logo.png"}
+          src={"/images/logo/logo.png"}
           alt="logo"
           width={70}
           height={30}

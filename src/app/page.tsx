@@ -17,6 +17,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import CardProduct from "./product/components/CardProduct";
+import { useCartStore } from "@/store/useCartStore";
+import { useEffect } from "react";
 
 interface ICategories {
   id: number;
@@ -37,6 +39,12 @@ export default function Home() {
     isLoading,
     error,
   } = useSWR("/api/products/highlight", fetcherWithHeaders);
+
+  const { fetchCart } = useCartStore();
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
   const categories: ICategories[] = [
     {
       id: 1,

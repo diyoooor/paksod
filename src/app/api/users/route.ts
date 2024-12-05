@@ -1,13 +1,32 @@
 import clientPromise from "@/lib/mongodb";
+import { verifyLineTokens } from "@/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const authorizationHeader = req.headers.get("authorization");
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Authorization header is required" },
+        { status: 401 }
+      );
+    }
+
+    const token = authorizationHeader.split(" ")[1];
+    const userData = await verifyLineTokens(token);
+
+    if (!userData || !userData.userId) {
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 403 }
+      );
+    }
+
     const client = await clientPromise;
     const db = client.db();
     const usersCollection = db.collection("users");
 
-    const user = await usersCollection.findOne();
+    const user = await usersCollection.findOne({ lineUserId: userData.userId });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -57,6 +76,48 @@ export async function POST(req: NextRequest) {
     console.error("Error saving user to the database:", error);
     return NextResponse.json(
       { error: "Failed to save user to the database" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const authorizationHeader = req.headers.get("authorization");
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Authorization header is required" },
+        { status: 401 }
+      );
+    }
+
+    const token = authorizationHeader.split(" ")[1];
+    const userData = await verifyLineTokens(token);
+    const { ...userInfo } = await req.json();
+
+    console.log(`userInfo => `, userInfo);
+
+    if (!userInfo) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+
+    const client = await clientPromise;
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    const result = await usersCollection.updateOne(
+      { lineUserId: userData.userId },
+      { $set: { ...userInfo } }
+    );
+
+    return NextResponse.json({
+      message: "User updated successfully",
+      result,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return NextResponse.json(
+      { error: "Failed to update user" },
       { status: 500 }
     );
   }

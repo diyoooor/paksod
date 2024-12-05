@@ -18,9 +18,9 @@ export const useCart = () => {
   const addProduct = async (productId, priceId, quantity, unit) => {
     try {
       const newProduct = { productId, priceId, quantity, unit };
-      setCart((prev) => [...prev, newProduct]); // Optimistic update
+      setCart((prev) => [...prev, newProduct]);
       await fetcherWithHeaders("/api/cart", "POST", newProduct);
-      mutate(); // Revalidate cart
+      mutate();
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
@@ -42,6 +42,7 @@ export const useCart = () => {
   };
 
   // Debounced version of updateQuantity to prevent frequent API calls
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdateQuantity = useCallback(
     debounce((productId, quantity) => {
       updateQuantity(productId, quantity);
@@ -49,10 +50,9 @@ export const useCart = () => {
     []
   );
 
-  // Handle removing a product from the cart
   const removeProduct = async (productId) => {
     try {
-      Swal.fire({
+      await Swal.fire({
         title: "คุณต้องการลบสินค้านี้ใช่หรือไม่?",
         icon: "warning",
         showCancelButton: true,
@@ -62,7 +62,7 @@ export const useCart = () => {
         if (result.isConfirmed) {
           setCart((prev) =>
             prev.filter((item) => item.productId !== productId)
-          ); // Optimistic update
+          );
           await fetcherWithHeaders(`/api/cart/${productId}`, "DELETE");
           mutate();
         }
@@ -72,10 +72,9 @@ export const useCart = () => {
     }
   };
 
-  // Handle clearing the entire cart
   const clearCart = async () => {
     try {
-      Swal.fire({
+      await Swal.fire({
         title: "คุณต้องการลบสินค้าทั้งหมดใช่หรือไม่?",
         icon: "warning",
         showCancelButton: true,
@@ -99,7 +98,7 @@ export const useCart = () => {
       (total, item) =>
         total +
         (item.prices?.find((price) => price.id === item.priceId)?.value || 0) *
-          item.quantity,
+        item.quantity,
       0
     );
   };

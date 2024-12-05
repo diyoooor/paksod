@@ -2,7 +2,8 @@ import { IconHeart } from "@tabler/icons-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import AddToCartModal from "./AddToCart";
-import { useCart } from "@/hooks/useCart";
+import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "next/navigation";
 
 interface ICardProductProps {
   item: Product;
@@ -26,14 +27,10 @@ interface Product {
 
 const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { addProduct } = useCart();
-  const handleAddToCart = (item: {
-    productId: string;
-    priceId: number;
-    quantity: number;
-    unit: string;
-  }) => {
-    addProduct(item.productId, item.priceId, item.quantity, item.unit);
+  const { addToCart } = useCartStore();
+  const router = useRouter();
+  const handleAddToCart = (productId, priceId, qty, unit) => {
+    addToCart(productId, priceId, qty, unit);
   };
 
   return (
@@ -45,6 +42,7 @@ const CardProduct: React.FC<ICardProductProps> = ({ item }) => {
           width={100}
           height={90}
           className="object-contain mx-auto p-6 drop-shadow-sm h-fit w-auto"
+          onClick={() => router.push(`/product/${item._id}`)}
         />
         <div className="py-2 text-center">
           <p className="text-lg font-bold text-gray-800">{item.name}</p>

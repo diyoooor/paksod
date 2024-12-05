@@ -3,10 +3,8 @@
 import liff from "@line/liff";
 
 const LoginPage = () => {
-  const handleLogin = () => {
-    liff.login({
-      redirectUri: window.location.origin,
-    });
+  const handleLogin = async () => {
+    liff.login({ redirectUri: window.location.href });
   };
 
   return (

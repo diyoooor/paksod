@@ -1,40 +1,45 @@
 import { useEffect } from "react";
 import liff from "@line/liff";
+import axiosInstance from "@/lib/axiosInstance";
 
 const useLiffAuth = () => {
   useEffect(() => {
     const checkLogin = async () => {
-      const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
-
-      if (!liffId) {
-        console.error(
-          "LIFF ID is not defined. Check your environment variables."
-        );
-        return;
-      }
-
       try {
+        const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
+
+        if (!liffId) {
+          throw new Error(
+            "LIFF ID is not defined. Check your environment variables."
+          );
+        }
+
+        // Initialize LIFF
         await liff.init({ liffId });
 
-        if (!liff.isLoggedIn()) {
-          console.log("User is not logged in. Redirecting to LINE login.");
-          liff.login({
-            redirectUri: window.location.href,
-          });
-        } else {
-          const profile = await liff.getProfile();
-          const idToken = await liff.getAccessToken();
+        const [profile, idToken] = await Promise.all([
+          liff.getProfile(),
+          liff.getAccessToken(),
+        ]);
 
-          localStorage.setItem("id_token", idToken);
+        // Store token locally
+        localStorage.setItem("id_token", idToken);
 
-          await saveUserToDatabase({
-            lineUserId: profile.userId,
-            displayName: profile.displayName,
-            pictureUrl: profile.pictureUrl,
-          });
+        if (!idToken && !!liff.isLoggedIn()) {
+          liff.login({ redirectUri: window.location.href })
         }
+
+        // Save user to the database
+        await saveUserToDatabase({
+          lineUserId: profile.userId,
+          displayName: profile.displayName,
+          pictureUrl: profile.pictureUrl,
+        });
       } catch (error) {
-        console.error("Failed to initialize LIFF or check login status", error);
+        console.error(
+          "Error during LIFF initialization or login process:",
+          error
+        );
       }
     };
 
@@ -42,25 +47,20 @@ const useLiffAuth = () => {
   }, []);
 };
 
+// Separate function to handle saving user to the database
 const saveUserToDatabase = async (user: {
   lineUserId: string;
   displayName: string;
   pictureUrl: string;
 }) => {
   try {
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const response = await axiosInstance.post("/api/users", user);
 
-    if (!response.ok) {
-      throw new Error("Failed to save user to the database");
+    if (response.status === 200) {
+      console.log("User saved or updated successfully");
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
     }
-
-    console.log("User saved or updated successfully");
   } catch (error) {
     console.error("Error saving user to the database:", error);
   }
