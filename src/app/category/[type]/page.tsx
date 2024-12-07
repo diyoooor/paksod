@@ -2,7 +2,7 @@
 
 import CardProduct from "@/app/product/components/CardProduct";
 import Loading from "@/components/Loading/Loading";
-import { fetcherWithHeaders } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utility/fetcher";
 import { use, useEffect, useState } from "react";
 import useSWR from "swr";
 

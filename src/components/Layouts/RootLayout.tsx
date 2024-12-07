@@ -7,7 +7,7 @@ export interface ILayout {
 }
 
 export default function RootLayout({ children }: ILayout) {
-  const { initUser, logout } = useUserStore();
+  const { initUser } = useUserStore();
 
   useEffect(() => {
     initUser();
@@ -16,15 +16,7 @@ export default function RootLayout({ children }: ILayout) {
   return (
     <html lang="en">
       <body>
-        <main>
-          {/* <button
-            onClick={logout}
-            className="border border-green-medium p-2 active:border-red-500"
-          >
-            Sign Out
-          </button> */}
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+import axiosInstance from "@/lib/axiosInstance";
 import { create } from "zustand";
 
 export interface Product {
@@ -12,12 +13,14 @@ export interface Product {
 
 interface ProductState {
   products: Product[];
+  isLoading: boolean;
   fetchProducts: () => void;
+  fetchHighlights: () => void;
 }
 
 export const useProductStore = create<ProductState>((set) => ({
   products: [],
-
+  isLoading: false,
   fetchProducts: () => {
     const mockProducts: Product[] = [
       {
@@ -41,4 +44,24 @@ export const useProductStore = create<ProductState>((set) => ({
     ];
     set({ products: mockProducts });
   },
+
+  fetchHighlights: async () => {
+
+    set({ isLoading: true });
+    try {
+
+      const response = await axiosInstance.get("/api/products/highlight");
+
+      console.log(`response => `, response)
+
+      set({
+        products: response.data,
+        isLoading: false,
+      })
+    } catch (error) {
+      console.error(`error => `, error)
+    } finally {
+      set({ isLoading: false });
+    }
+  }
 }));

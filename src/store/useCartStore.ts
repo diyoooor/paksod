@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { getAccessToken } from "@/utils/common";
+import { getAccessToken } from "@/utility/common";
 import Swal from "sweetalert2";
 import { create } from "zustand";
 
@@ -36,6 +36,12 @@ interface CartState {
   initCart: () => void;
 }
 
+const headerConfig = {
+  headers: {
+    'Authorization': 'Bearer' + getAccessToken(),
+  },
+}
+
 export const useCartStore = create<CartState>((set, get) => ({
   cartItems: [],
   totalItems: 0,
@@ -46,7 +52,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
       const token = getAccessToken()
       const response = await axiosInstance.get("/api/cart", { headers: { 'Authorization': 'Bearer ' + token } });
-      const { products } = response.data;
+      const { items: products } = response.data.data;
       set({
         cartItems: products,
         totalItems: products.length,
@@ -61,8 +67,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   saveCart: async () => {
     const { cartItems } = get();
     try {
-      await axiosInstance.post("/api/cart", { cartItems });
-      console.log("Cart saved successfully!");
+      await axiosInstance.post("/api/cart", { cartItems }, headerConfig);
     } catch (error) {
       console.error("Error saving cart:", error);
     }
@@ -118,6 +123,10 @@ export const useCartStore = create<CartState>((set, get) => ({
         priceId,
         quantity: newQuantity,
         unit,
+      }, {
+        headers: {
+          'Authorization': 'Bearer' + getAccessToken(),
+        },
       });
     } else {
       axiosInstance.post("/api/cart", {
@@ -125,6 +134,10 @@ export const useCartStore = create<CartState>((set, get) => ({
         priceId,
         quantity,
         unit,
+      }, {
+        headers: {
+          'Authorization': 'Bearer' + getAccessToken(),
+        },
       });
       updatedItems.push({ productId, priceId, quantity, unit });
     }

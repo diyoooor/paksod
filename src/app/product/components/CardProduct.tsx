@@ -16,7 +16,7 @@ interface Price {
 }
 
 interface Product {
-  _id: string;
+  _id: unknown;
   name: string;
   otherNames: string[];
   type: string;

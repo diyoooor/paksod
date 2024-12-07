@@ -1,35 +1,30 @@
+import { CommonErrorCode } from "@/constants/error-message";
 import clientPromise from "@/lib/mongodb";
 import { verifyLineTokens } from "@/lib/verifyToken";
+import { commonErrorResponse, commonSuccessResponse } from "@/utility/response";
 import { BSON } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
     const authorizationHeader = req.headers.get("authorization");
-    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Authorization header is required" },
-        { status: 401 }
-      );
+    if (!authorizationHeader) {
+      return NextResponse.json(commonErrorResponse(401, "Invalid authorization header", ""));
     }
 
     const token = authorizationHeader.split(" ")[1];
     const userData = await verifyLineTokens(token);
 
     if (!userData || !userData.userId) {
-      return NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 403 }
-      );
+      return NextResponse.json(commonErrorResponse(404, "Invalid", "Invalid"));
     }
 
     const client = await clientPromise;
     const db = client.db();
 
     const cartCollection = db.collection("cart");
-    const productCollection = db.collection("products"); // Related table
+    const productCollection = db.collection("products");
 
-    // Fetch user's cart
     const userCart = await cartCollection.findOne({ userId: userData.userId });
 
     if (!userCart) {
@@ -43,7 +38,6 @@ export async function GET(req: NextRequest) {
       await cartCollection.insertOne(newCart);
     }
 
-    // Fetch related product details for each item in the cart
     const productsWithDetails = await Promise.all(
       userCart.products.map(async (item) => {
         const productDetails = await productCollection.findOne(
@@ -58,25 +52,21 @@ export async function GET(req: NextRequest) {
       })
     );
 
-    return NextResponse.json({
+    return NextResponse.json(commonSuccessResponse(200, 'Get Cart Success', {
       userId: userCart.userId,
-      products: productsWithDetails,
+      items: productsWithDetails,
       createdAt: userCart.createdAt,
       updatedAt: userCart.updatedAt,
-    });
+    }))
   } catch (error) {
     console.error("Error fetching cart:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch cart" },
-      { status: 500 }
-    );
+    return NextResponse.json(commonErrorResponse(400, error.message, error));
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const { productId, priceId, quantity, unit } = await req.json();
-
     const authorizationHeader = req.headers.get("authorization");
     if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -168,10 +158,11 @@ export async function PUT(req: NextRequest) {
 
     // Check authorization header
     const authorizationHeader = req.headers.get("authorization");
+
+    console.log(`authorization: ${authorizationHeader}`)
+
     if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Authorization header is required" },
-        { status: 401 }
+      return NextResponse.json(commonErrorResponse(401, "Invalid authorization header", "")
       );
     }
 
@@ -180,10 +171,7 @@ export async function PUT(req: NextRequest) {
     const userData = await verifyLineTokens(token);
 
     if (!userData || !userData.userId) {
-      return NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 403 }
-      );
+      return NextResponse.json(commonErrorResponse(403, "Invalid user data", ""));
     }
 
     // Validate request payload
@@ -195,8 +183,7 @@ export async function PUT(req: NextRequest) {
       !unit
     ) {
       return NextResponse.json(
-        { error: "Invalid product, price, unit, or quantity" },
-        { status: 400 }
+        commonErrorResponse(CommonErrorCode.BAD_REQUEST, "Invalid product, price, unit, or quantity", "Invalid")
       );
     }
 

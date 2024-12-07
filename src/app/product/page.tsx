@@ -1,6 +1,6 @@
 "use client";
 
-import { fetcherWithHeaders } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utility/fetcher";
 import {
   IconCarrot,
   IconFish,

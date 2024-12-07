@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyLineTokens } from "@/lib/verifyToken"; // Assuming you have a function to verify the token
-import { ObjectId } from "mongodb";
 
 export async function POST(req: NextRequest) {
   try {

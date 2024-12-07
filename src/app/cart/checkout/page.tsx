@@ -1,7 +1,7 @@
 "use client";
 import { useCartStore } from "@/store/useCartStore";
 import { useUserStore } from "@/store/useUserStore";
-import { numberWithCommas } from "@/utils/common";
+import { numberWithCommas } from "@/utility/common";
 import { useRouter } from "next/navigation";
 import React from "react";
 

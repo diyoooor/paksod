@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import useSWR from "swr";
 import debounce from "lodash.debounce";
-import { fetcherWithHeaders } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utility/fetcher";
 import Swal from "sweetalert2";
 
 export const useCart = () => {

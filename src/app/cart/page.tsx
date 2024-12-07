@@ -1,7 +1,7 @@
 "use client";
 import { useCartStore } from "@/store/useCartStore";
-import { numberWithCommas } from "@/utils/common";
-import { IconShoppingBag, IconTrash } from "@tabler/icons-react";
+import { numberWithCommas } from "@/utility/common";
+import { IconShoppingBag } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -115,7 +115,7 @@ const CartPage = () => {
                       >
                         -
                       </button>
-                      <p>{item.quantity}</p>
+                      <p className="text-xl">{item.quantity}</p>
                       <button
                         onClick={() => handleIncrement(item)}
                         className="bg-gray-200 rounded-full p-1 w-8 h-8 text-center"
@@ -131,16 +131,6 @@ const CartPage = () => {
                       </p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => removeFromCart(item.productId)}
-                    className="absolute top-2 right-2 inline-flex gap-2"
-                    aria-label="ลบสินค้า"
-                  >
-                    <IconTrash
-                      stroke={1.5}
-                      className="w-6 h-6 stroke-red-normal rounded-full"
-                    />
-                  </button>
                 </li>
               );
             })}

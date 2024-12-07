@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import { fetcherWithHeaders } from "@/utils/fetcher";
+import { fetcherWithHeaders } from "@/utility/fetcher";
 import Image from "next/image";
 import { use } from "react";
 import useSWR from "swr";

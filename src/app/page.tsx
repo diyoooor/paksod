@@ -1,6 +1,5 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import { fetcherWithHeaders } from "@/utils/fetcher";
 import {
   IconBottle,
   IconCarrot,
@@ -15,10 +14,10 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import useSWR from "swr";
 import CardProduct from "./product/components/CardProduct";
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect } from "react";
+import { useProductStore } from "@/store/useProductStore";
 
 interface ICategories {
   id: number;
@@ -34,16 +33,13 @@ interface IWhyUs {
 
 export default function Home() {
   const router = useRouter();
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = useSWR("/api/products/highlight", fetcherWithHeaders);
+  const { products, isLoading, fetchHighlights } = useProductStore();
 
   const { fetchCart } = useCartStore();
   useEffect(() => {
     fetchCart();
-  }, [fetchCart]);
+    fetchHighlights();
+  }, [fetchCart, fetchHighlights]);
 
   const categories: ICategories[] = [
     {
@@ -100,8 +96,6 @@ export default function Home() {
   ];
 
   if (isLoading) return <Loading />;
-
-  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
