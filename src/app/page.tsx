@@ -1,99 +1,21 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import {
-  IconBottle,
-  IconCarrot,
-  IconClockHour3,
-  IconCurrencyBaht,
-  IconEggs,
-  IconFish,
-  IconMeat,
-  IconSalad,
-  IconSparkles,
-  IconTruckDelivery,
-} from "@tabler/icons-react";
+import { IconSparkles } from "@tabler/icons-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import CardProduct from "./product/components/CardProduct";
-import { useCartStore } from "@/store/useCartStore";
+import { whyUs } from "@/constants/why-us";
+import { categories } from "@/constants/category";
 import { useEffect } from "react";
 import { useProductStore } from "@/store/useProductStore";
-
-interface ICategories {
-  id: number;
-  name: string;
-  icon: React.ReactNode;
-}
-
-interface IWhyUs {
-  icon: React.ReactNode;
-  topic: string;
-  description: string;
-}
+import ProductCard from "@/components/Card/ProductCard";
 
 export default function Home() {
   const router = useRouter();
-  const { products, isLoading, fetchHighlights } = useProductStore();
+  const { fetchHighlights, products, isLoading } = useProductStore();
 
-  const { fetchCart } = useCartStore();
   useEffect(() => {
-    fetchCart();
     fetchHighlights();
-  }, [fetchCart, fetchHighlights]);
-
-  const categories: ICategories[] = [
-    {
-      id: 1,
-      name: "ผักสด",
-      icon: <IconCarrot className="h-9 w-9" stroke={1.5} />,
-    },
-    {
-      id: 2,
-      name: "อาหารทะเล",
-      icon: <IconFish className="h-9 w-9" stroke={1.5} />,
-    },
-    {
-      id: 3,
-      name: "เนื้อสัตว์",
-      icon: <IconMeat className="h-7 w-7" stroke={1.5} />,
-    },
-    {
-      id: 4,
-      name: "เครื่องปรุง",
-      icon: <IconBottle className="h-7 w-7" stroke={1.5} />,
-    },
-    {
-      id: 5,
-      name: "ไข่",
-      icon: <IconEggs className="h-7 w-7" stroke={1.5} />,
-    },
-    {
-      id: 6,
-      name: "ผักดอง",
-      icon: <IconClockHour3 className="h-7 w-7" stroke={1.5} />,
-    },
-  ];
-
-  const whyUs: IWhyUs[] = [
-    {
-      icon: <IconSalad className="h-32 w-32" stroke={1} />,
-      topic: "สดใหม่ทุกวัน",
-      description:
-        "ผักสดจากฟาร์มที่คัดสรรอย่างดี ส่งตรงถึงร้านทุกวัน เพื่อความสดใหม่และคุณภาพสูงสุดสำหรับลูกค้า",
-    },
-    {
-      icon: <IconTruckDelivery className="h-32 w-32" stroke={1} />,
-      topic: "สะดวก รวดเร็ว",
-      description:
-        "บริการจัดส่งทั้งขายปลีกและส่ง ตรงเวลา รวดเร็ว เพื่อความสะดวกของลูกค้าทุกท่าน",
-    },
-    {
-      icon: <IconCurrencyBaht className="h-32 w-32" stroke={1} />,
-      topic: "ราคาย่อมเยา",
-      description:
-        "เสนอราคาที่คุ้มค่า ทั้งขายปลีกและส่ง พร้อมโปรโมชั่นพิเศษสำหรับลูกค้าประจำ",
-    },
-  ];
+  }, [fetchHighlights]);
 
   if (isLoading) return <Loading />;
 
@@ -125,14 +47,22 @@ export default function Home() {
           );
         })}
       </section>
-      <section className="mt-4 bg-red-400 rounded-xl p-4">
+      <section className="mt-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl p-4">
         <h1 className="text-3xl py-4 font-semibold inline-flex gap-2">
           <IconSparkles />
           สินค้าแนะนำ
         </h1>
         <div className="grid grid-cols-2 gap-4">
           {products.map((item) => {
-            return <CardProduct item={item} key={item.name} />;
+            return (
+              <ProductCard
+                key={item.name}
+                prices={item.prices}
+                name={item.name}
+                image={item.image}
+                product={item}
+              />
+            );
           })}
         </div>
         <div className="w-full mt-4 flex">
